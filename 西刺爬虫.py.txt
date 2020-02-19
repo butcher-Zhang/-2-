@@ -18,7 +18,13 @@ for url in all_url:
         adress = line.xpath('td[4]/a/text()')[0]
         form = line.xpath('td[6]/text()')
         item = [ip,count,adress,form]
-        with open('����ip-����.csv','a',newline='')as f:
+        with open('´úÀíip-Î÷´Ì.csv','a',newline='')as f:
             writer =csv.writer(f)
             writer.writerow(item)
-            print('������ȡ��',ip)
+            print('ÕýÔÚÅÀÈ¡£º',ip)
+            #代码分析 ： 首先请求西刺网站相应我们的爬虫 （为了防止ip被西刺官网屏蔽 可以采用代理池）
+            #           其次对西刺的网页进行一个分析 每一个代理ip都在对应的一行中 我们先对这一行进行一个爬取从而构建一个选择器
+            #           通过对行里面的元素分析过后我们可以对比得到ip、端口、发出地址、网络协议的类型的详细地址相对于选择器而言
+            #           我们创建一个函数用来保存下载的数据 通过在写入记事本后提示我们爬取已经完成
+            #注意事项： 在访问西刺时一定要加长每次访问的时间间隔 否则当你下载一定数据量之后就会被西刺的反爬虫机制检测到 对我们的ip进行封号
+            #          在IP被封之后只能等一天 才会自动解封
