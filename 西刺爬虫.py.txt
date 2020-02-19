@@ -1,0 +1,24 @@
+import requests
+from lxml import etree
+import csv
+import time
+import random
+headers ={'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36'}
+proxies={'http':'http://180.119.141.147:9999'}
+pre_url ='https://www.xicidaili.com/nn/'
+all_url=[pre_url + str(x) for x in range(1,100)]
+for url in all_url:
+    time.sleep(random.randint(5,8))
+    response = requests.get(url,headers=headers,proxies=proxies)
+    selector = etree.HTML(response.text)
+    all_line = selector.xpath('//*[starts-with(@class,"odd")]')
+    for line in all_line:
+        ip = line.xpath('td[2]/text()')[0]
+        count = line.xpath('td[3]/text()')[0]
+        adress = line.xpath('td[4]/a/text()')[0]
+        form = line.xpath('td[6]/text()')
+        item = [ip,count,adress,form]
+        with open('代理ip-西刺.csv','a',newline='')as f:
+            writer =csv.writer(f)
+            writer.writerow(item)
+            print('正在爬取：',ip)
